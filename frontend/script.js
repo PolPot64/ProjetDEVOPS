@@ -1,5 +1,5 @@
 function fetchData() {
-    fetch('http://localhost:8080/api-endpoint') // Replace with your actual API endpoint
+    fetch('http://localhost:8080/api-0.0.1/api/openapi.json')
         .then(response => response.json())
         .then(data => {
             document.getElementById('data').innerText = JSON.stringify(data);
