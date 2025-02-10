@@ -4,8 +4,8 @@ services:
     container_name: api-payara
     image: payara/micro:5.2021.10-jdk11
     build:
-      context: ./dockerfile
-      dockerfile: payara.dockerfile
+      context: .
+      dockerfile: dockerfile/payara.dockerfile
     ports:
       - 8080:8080
     volumes:
@@ -31,6 +31,11 @@ services:
       - POSTGRES_PASSWORD=1234
     networks:
       - api-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
 
   pgadmin:
     container_name: api-pgadmin
@@ -47,7 +52,8 @@ services:
 
   frontend:
     container_name: frontend-nginx
-    build: ./frontend
+    build:
+      context: ./frontend
     ports:
       - "8081:80"
     networks:
