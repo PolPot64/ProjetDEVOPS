@@ -1,10 +1,9 @@
-version: "3.0"
 services:
 
   api:
     container_name: api-payara
     image: payara/micro:5.2021.10-jdk11
-    build: 
+    build:
       context: ./dockerfile
       dockerfile: payara.dockerfile
     ports:
@@ -16,7 +15,8 @@ services:
     networks:
       - api-net
     depends_on:
-      - postgres-db
+      postgres-db:
+        condition: service_healthy
 
   postgres-db:
     container_name: api-postgres
@@ -31,7 +31,12 @@ services:
       - POSTGRES_PASSWORD=1234
     networks:
       - api-net
-      
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+
   pgadmin:
     container_name: api-pgadmin
     image: dpage/pgadmin4:latest
@@ -45,7 +50,16 @@ services:
     depends_on:
       - postgres-db
 
+  frontend:
+    container_name: frontend-nginx
+    build: ./frontend
+    ports:
+      - "8081:80"
+    networks:
+      - api-net
+    depends_on:
+      - api
+
 networks:
   api-net:
     driver: bridge
-    
