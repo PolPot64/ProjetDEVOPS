@@ -18,7 +18,7 @@ CREATE TABLE bid (
 );
 
 --
--- ISERT BIDS
+-- INSERT BIDS
 --
 INSERT INTO bid VALUES(1, 80, 1, 1, 3, 'Hello', current_timestamp, current_timestamp, true);
 INSERT INTO bid VALUES(2, 7.5, 2, 2, 6, 'My name is Stephan, i m your friend', current_timestamp, current_timestamp, true);
